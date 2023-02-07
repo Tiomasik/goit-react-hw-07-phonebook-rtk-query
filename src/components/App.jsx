@@ -1,32 +1,22 @@
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-
-import { gettIsLoading, getError } from "redux/selectors";
-import { fetchAll } from "redux/operations";
 import Form from './Form/Form';
 import { ContactList } from './ContactList/ContactList'
 import Filter from './Filter/Filter'
 import { AppBar } from './AppBar.styled'
 import  Loader  from  '../components/Loader/Loader'
-
+import { useFetchAllQuery } from '../redux/contactsSlice'
 
   
 const App = () => {
- const dispatch = useDispatch();
-  const isLoading = useSelector(gettIsLoading);
-  const error = useSelector(getError);
-
-  useEffect(() => {
-    dispatch(fetchAll());
-  }, [dispatch]);
+  const { data, isFetching, isLoading, error } = useFetchAllQuery()
 
   return (
     <AppBar>
       <Form />
-      <Filter />
-      <ContactList />
-      {isLoading && !error && <Loader/>}
+      {!isLoading && <>
+        {data.length !== 0 && <Filter />}
+        <ContactList />
+      </>}
+      {isFetching && !error && <Loader/>}
     </AppBar>
   )
 };

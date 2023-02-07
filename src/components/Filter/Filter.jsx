@@ -1,20 +1,21 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { filterContacts } from "redux/contactsSlice";
-import { getContacts } from "redux/selectors";
+import { filterContacts } from "redux/filterSlice";
 import { StyleName } from './Filter.styled'
 import { StyleInput } from './Filter.styled'
+import { useFetchAllQuery } from '../../redux/contactsSlice'
 
 const Filter = () => {
     const dispatch = useDispatch();
-    const contacts = useSelector(getContacts)
+    const { data } = useFetchAllQuery()
 
     const changeFilter = (evt) => {
         dispatch(filterContacts(evt.currentTarget.value))
     }
+
 return (
     <>
-        {contacts.length !== 0 && <div>
+        {data && <div>
             <h3 style={{textAlign: 'center',
                         fontSize: 26,
                         fontWeight: 700,

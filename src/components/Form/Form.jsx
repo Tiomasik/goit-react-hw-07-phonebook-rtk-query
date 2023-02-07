@@ -1,13 +1,8 @@
-// import { nanoid } from 'nanoid'
-
 import { Formik, Field, ErrorMessage  } from 'formik';
 import * as yup from 'yup';
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { getContacts } from "redux/selectors";
 
 import { StyleForm } from './Form.styled'
-import { addContact } from "redux/operations";
+import { useFetchAllQuery, useAddContactMutation } from '../../redux/contactsSlice'
 
 const initialValues = {
   name: '', number: ''
@@ -33,16 +28,16 @@ const FormErrorNumber = ({ name }) => {
 }
 
 const FormSubmit = () => {
-  const contacts = useSelector(getContacts)
-  const dispatch = useDispatch();
+  const { data } = useFetchAllQuery()
+  const [ addContact ] = useAddContactMutation();
   const handlSubmit = (value, { resetForm }) => {
-    const { name, number } = value
-    const arrayContact = { name, number }
+  const { name, number } = value
+  const arrayContact = { name, number }
 
-    if (!(contacts.filter(contact => contact.name.toLowerCase() === arrayContact.name.trim().toLowerCase())).length) {
-      resetForm()
-      return dispatch(addContact(arrayContact))
-    } else alert(`${arrayContact.name} is already in contacts`)
+  if (!(data.filter(contact => contact.name.toLowerCase() === arrayContact.name.trim().toLowerCase())).length) {
+    resetForm()
+    return addContact(arrayContact)
+  } else alert(`${arrayContact.name} is already in contacts`)
     resetForm()  
   }
 

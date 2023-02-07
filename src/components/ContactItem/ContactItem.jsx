@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from "react-redux";
-import { deleteContact } from "redux/operations";
 
+import { useDeleteContactMutation } from '../../redux/contactsSlice'
 import { Item, IconSmile, IconPhone } from "./ContactItem.styled";
 
 const ContactItem = ({ name, number, id }) => {
-    const dispatch = useDispatch();
+    const [deleteContact ] = useDeleteContactMutation();
 
     return (
         <>
@@ -13,7 +12,7 @@ const ContactItem = ({ name, number, id }) => {
                 <Item><IconSmile /><span>{name}</span></Item>
                 <Item><IconPhone/><span>{number}</span></Item>
             </div>
-            <button type="button" onClick={() => dispatch(deleteContact(id))}>Delete contact</button>
+            <button type="button" onClick={() => deleteContact(id)}>Delete contact</button>
         </>)
 }
 
